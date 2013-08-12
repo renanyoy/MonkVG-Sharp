@@ -1,4 +1,4 @@
 MonkVG-Sharp
 ============
 
-Wrapper for MonkVG Android
+Wrapper C# for MonkVG Android
