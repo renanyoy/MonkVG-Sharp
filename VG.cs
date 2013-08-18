@@ -12,17 +12,17 @@ namespace MonkVG
 
 		public enum ParamTypeMnk
 		{
-			TESSELLATION_ITERATIONS_MNK  = 0x1170,
-			SURFACE_WIDTH_MNK            = 0x1171,
-			SURFACE_HEIGHT_MNK           = 0x1172
+			TESSELLATION_ITERATIONS_MNK              = 0x1170,
+			SURFACE_WIDTH_MNK                        = 0x1171,
+			SURFACE_HEIGHT_MNK                       = 0x1172
 		}
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		public enum RenderingBackendTypeMNK
 		{
-			OPENGLES11              = 0,
-			OPENGLES20              = 1
+			OPENGLES11                               = 0,
+			OPENGLES20                               = 1
 		}
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -190,7 +190,7 @@ namespace MonkVG
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		public enum PathAbsRel : ushort
+		public enum PathAbsRel : byte
 		{
 			ABSOLUTE                                 = 0,
 			RELATIVE                                 = 1
@@ -198,7 +198,7 @@ namespace MonkVG
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		public enum PathSegment : ushort
+		public enum PathSegment : byte
 		{
 			CLOSE_PATH                               = ( 0 << 1),
 			MOVE_TO                                  = ( 1 << 1),
@@ -217,7 +217,7 @@ namespace MonkVG
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		public enum PathCommand : ushort
+		public enum PathCommand : byte
 		{
 			MOVE_TO_ABS                              = PathSegment.MOVE_TO    | PathAbsRel.ABSOLUTE,
 			MOVE_TO_REL                              = PathSegment.MOVE_TO    | PathAbsRel.RELATIVE,
@@ -352,19 +352,19 @@ namespace MonkVG
 
 		public enum ColorRampSpreadMode
 		{
-			PAD                    = 0x1C00,
-			REPEAT                 = 0x1C01,
-			REFLECT                = 0x1C02
+			PAD                                      = 0x1C00,
+			REPEAT                                   = 0x1C01,
+			REFLECT                                  = 0x1C02
 		}
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		public enum TilingMode
 		{
-			FILL                                = 0x1D00,
-			PAD                                 = 0x1D01,
-			REPEAT                              = 0x1D02,
-			REFLECT                             = 0x1D03
+			FILL                                     = 0x1D00,
+			PAD                                      = 0x1D01,
+			REPEAT                                   = 0x1D02,
+			REFLECT                                  = 0x1D03
 		}
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -425,27 +425,27 @@ namespace MonkVG
 
 		public enum ImageQuality
 		{
-			NONANTIALIASED             = (1 << 0),
-			FASTER                     = (1 << 1),
-			BETTER                     = (1 << 2)
+			NONANTIALIASED                           = (1 << 0),
+			FASTER                                   = (1 << 1),
+			BETTER                                   = (1 << 2)
 		}
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		public enum ImageParamType
 		{
-			VG_IMAGE_FORMAT                             = 0x1E00,
-			VG_IMAGE_WIDTH                              = 0x1E01,
-			VG_IMAGE_HEIGHT                             = 0x1E02
+			VG_IMAGE_FORMAT                          = 0x1E00,
+			VG_IMAGE_WIDTH                           = 0x1E01,
+			VG_IMAGE_HEIGHT                          = 0x1E02
 		}
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		public enum ImageMode
 		{
-			NORMAL                        = 0x1F00,
-			MULTIPLY                      = 0x1F01,
-			STENCIL                       = 0x1F02
+			NORMAL                                   = 0x1F00,
+			MULTIPLY                                 = 0x1F01,
+			STENCIL                                  = 0x1F02
 		}
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -463,39 +463,39 @@ namespace MonkVG
 
 		public enum BlendMode
 		{
-			SRC                                = 0x2000,
-			SRC_OVER                           = 0x2001,
-			DST_OVER                           = 0x2002,
-			SRC_IN                             = 0x2003,
-			DST_IN                             = 0x2004,
-			MULTIPLY                           = 0x2005,
-			SCREEN                             = 0x2006,
-			DARKEN                             = 0x2007,
-			LIGHTEN                            = 0x2008,
-			ADDITIVE                           = 0x2009
+			SRC                                      = 0x2000,
+			SRC_OVER                                 = 0x2001,
+			DST_OVER                                 = 0x2002,
+			SRC_IN                                   = 0x2003,
+			DST_IN                                   = 0x2004,
+			MULTIPLY                                 = 0x2005,
+			SCREEN                                   = 0x2006,
+			DARKEN                                   = 0x2007,
+			LIGHTEN                                  = 0x2008,
+			ADDITIVE                                 = 0x2009
 		}
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		public enum FontParamType
 		{
-			VG_FONT_NUM_GLYPHS                          = 0x2F00
+			VG_FONT_NUM_GLYPHS                       = 0x2F00
 		}
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		public enum HardwareQueryType
 		{
-			IMAGE_FORMAT                       = 0x2100,
-			PATH_DATATYPE                      = 0x2101
+			IMAGE_FORMAT                             = 0x2100,
+			PATH_DATATYPE                            = 0x2101
 		}
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		public enum HardwareQueryResult
 		{
-			ACCELERATED                     = 0x2200,
-			UNACCELERATED                   = 0x2201
+			ACCELERATED                              = 0x2200,
+			UNACCELERATED                            = 0x2201
 		}
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
