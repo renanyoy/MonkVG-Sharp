@@ -3,8 +3,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{4C6B7665-33FF-4147-9872-8E0EDC5B377A}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
@@ -14,15 +12,14 @@
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
     <AssemblyName>MonkVG_Android</AssemblyName>
-    <ReleaseVersion>1.0.0</ReleaseVersion>
-    <TargetFrameworkVersion>v4.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.2</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
+    <DefineConstants>DEBUG;ANDROID</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidLinkMode>None</AndroidLinkMode>
@@ -30,7 +27,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
@@ -38,13 +34,14 @@
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <ConsolePause>false</ConsolePause>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>ANDROID</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Mono.Android" />
-    <Reference Include="OpenTK" />
+    <Reference Include="OpenTK-1.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Resources\Resource.designer.cs" />
@@ -53,15 +50,29 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
+    <None Include="..\..\_doc\openvg_1_0_1.pdf">
+      <Link>doc\openvg_1_0_1.pdf</Link>
+    </None>
+    <None Include="..\..\_doc\openvg-quick-reference-card.pdf">
+      <Link>doc\openvg-quick-reference-card.pdf</Link>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>
-    <EmbeddedNativeLibrary Include="libOpenVG-shared.so">
+    <EmbeddedNativeLibrary Include="libs\armeabi\libOpenVG-shared.so">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <Abi>armeabi-v7a</Abi>
     </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="libs\armeabi-v7a\libOpenVG-shared.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="libs\x86\libOpenVG-shared.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedNativeLibrary>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="doc\" />
   </ItemGroup>
 </Project>

@@ -1,8 +1,14 @@
 using System;
+#if OSX
+using MonoMac.OpenGL;
+#else
 using OpenTK;
+#endif
 
 namespace MonkVG
 {
+	public partial class VG
+	{
 	[Serializable]
 	public struct Matrix3 : IEquatable<Matrix3>
 	{
@@ -10,19 +16,19 @@ namespace MonkVG
 		// Static Fields
 		//
 		public static readonly Matrix3 Zero;
-		public static readonly Matrix3 Identity;
+		public static readonly Matrix3 Identity=new Matrix3(1,0,0, 0,1,0, 0,0,1);
 		//
 		// Fields
 		//
 		public float R0C0;
-		public float R2C2;
-		public float R2C1;
-		public float R2C0;
 		public float R0C1;
 		public float R0C2;
 		public float R1C0;
 		public float R1C1;
 		public float R1C2;
+		public float R2C0;
+		public float R2C1;
+		public float R2C2;
 		//
 		// Properties
 		//
@@ -225,28 +231,6 @@ namespace MonkVG
 		//
 		// Constructors
 		//
-		public Matrix3 (Quaterniond quaternion)
-		{
-			quaternion.Normalize ();
-			float num = (float)(quaternion.X * quaternion.X);
-			float num2 = (float)(quaternion.Y * quaternion.Y);
-			float num3 = (float)(quaternion.Z * quaternion.Z);
-			float num4 = (float)(quaternion.X * quaternion.Y);
-			float num5 = (float)(quaternion.X * quaternion.Z);
-			float num6 = (float)(quaternion.Y * quaternion.Z);
-			float num7 = (float)(quaternion.W * quaternion.X);
-			float num8 = (float)(quaternion.W * quaternion.Y);
-			float num9 = (float)(quaternion.W * quaternion.Z);
-			this.R0C0 = 1f - 2f * (num2 + num3);
-			this.R0C1 = 2f * (num4 - num9);
-			this.R0C2 = 2f * (num5 + num8);
-			this.R1C0 = 2f * (num4 + num9);
-			this.R1C1 = 1f - 2f * (num + num3);
-			this.R1C2 = 2f * (num6 - num7);
-			this.R2C0 = 2f * (num5 - num8);
-			this.R2C1 = 2f * (num6 + num7);
-			this.R2C2 = 1f - 2f * (num + num2);
-		}
 		public Matrix3 (float[] floatArray)
 		{
 			if (floatArray == null || floatArray.GetLength (0) < 9)
@@ -287,6 +271,34 @@ namespace MonkVG
 			this.R2C1 = matrix.R2C1;
 			this.R2C2 = matrix.R2C2;
 		}
+
+#if OSX
+		public Matrix3(ref MonoMac.OpenGL.Matrix4 m) 
+		{
+			this.R0C0=m.Row0.X;
+			this.R0C1=m.Row0.Y;
+			this.R0C2=m.Row3.X;	// Tx
+			this.R1C0=m.Row1.X;
+			this.R1C1=m.Row1.Y;
+			this.R1C2=m.Row3.Y;	// Ty
+			this.R2C0=m.Row2.X;
+			this.R2C1=m.Row2.Y;
+			this.R2C2=m.Row2.Z;
+		}
+#else
+		public Matrix3(ref OpenTK.Matrix4 m) 
+		{
+				this.R0C0=m.Row0.X;
+				this.R0C1=m.Row0.Y;
+				this.R0C2=m.Row3.X;	// Tx
+				this.R1C0=m.Row1.X;
+				this.R1C1=m.Row1.Y;
+				this.R1C2=m.Row3.Y;	// Ty
+				this.R2C0=m.Row2.X;
+				this.R2C1=m.Row2.Y;
+				this.R2C2=m.Row2.Z;
+		}
+#endif
 		//
 		// Static Methods
 		//
@@ -554,12 +566,7 @@ namespace MonkVG
 			this.R2C1 += matrix.R2C1;
 			this.R2C2 += matrix.R2C2;
 		}
-		/*
-		public Quaternion ToQuaternion ()
-		{
-			return new Quaternion (ref this);
-		}
-		*/
+
 		public override string ToString ()
 		{
 			return string.Format ("|{00}, {01}, {02}|\n|{03}, {04}, {05}|\n|{06}, {07}, {18}|\n" + this.R0C0, new object[]
@@ -630,10 +637,11 @@ namespace MonkVG
 			};
 		}
 		public unsafe static explicit operator IntPtr (Matrix3 matrix)
-		{
-			return (IntPtr)((void*)(&matrix.R0C0));
+			{
+				return (IntPtr)((void*)(&matrix.R0C0));
+			}
 		}
-	}
 
+	}
 }
 

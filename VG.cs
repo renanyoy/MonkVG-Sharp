@@ -1,7 +1,11 @@
-using System;
 using System.Drawing;
+using System;
 using System.Runtime.InteropServices;
+#if OSX
+using MonoMac.OpenGL;
+#else
 using OpenTK;
+#endif
 
 namespace MonkVG
 {
@@ -9,6 +13,9 @@ namespace MonkVG
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public partial class VG  
+	{
 
 		public enum ParamTypeMnk
 		{
@@ -266,7 +273,7 @@ namespace MonkVG
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		public enum PathParamType
+		public enum PathParamType : uint
 		{
 			PATH_FORMAT                              = 0x1600,
 			PATH_DATATYPE                            = 0x1601,
@@ -312,7 +319,7 @@ namespace MonkVG
 			FILL_PATH                                = (1 << 1)
 		}
 
-		public enum PaintParamType : int
+		public enum PaintParamType : ushort
 		{
 			TYPE                                     = 0x1A00,
 			COLOR                                    = 0x1A01,
@@ -335,7 +342,7 @@ namespace MonkVG
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		enum PaintType
+		public enum PaintType : int
 		{
 			COLOR                                    = 0x1B00,
 			LINEAR_GRADIENT                          = 0x1B01,
@@ -513,33 +520,59 @@ namespace MonkVG
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public class VG  
-	{
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgGetError")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgGetError")]
+#endif
 		public extern static int GetError();
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgFlush")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgFlush")]
+#endif
 		public extern static int Flush();
 	
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgFinish")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgFinish")]
+#endif
 		public extern static int Finish();
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgSetf")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgSetf")]
+#endif
 		public extern static int Setf(uint type, float value);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgSeti")] 
+#elif IOS
+		[DllImport("__Internal", EntryPoint="vgSeti")] 
+#endif
 		public extern static int Seti(uint type, int value);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgSetfv")] 
+#elif IOS
+		[DllImport("__Internal", EntryPoint="vgSetfv")] 
+#endif
 		unsafe extern static int Setfv(uint type, int count, float *values);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgSetiv")] 
+#elif IOS
+		[DllImport("__Internal", EntryPoint="vgSetiv")] 
+#endif
 		unsafe extern static int Setiv(uint type, int count, int *values);
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -571,19 +604,39 @@ namespace MonkVG
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgGetf")] 
+#elif IOS
+		[DllImport("__Internal", EntryPoint="vgGetf")] 
+#endif
 		public extern static  float  Getf(uint type);
 
+#if ANDROID
 		[DllImport("libOpenVG-sharedso", EntryPoint="vgGeti")] 
+#elif IOS
+		[DllImport("__Internal", EntryPoint="vgGeti")] 
+#endif
 		public extern static  int  Geti(uint type);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgGetVectorSize")] 
+#elif IOS
+		[DllImport("__Internal", EntryPoint="vgGetVectorSize")] 
+#endif
 		public extern static  int  GetVectorSize(uint type);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgGetfv")] 
+#elif IOS
+		[DllImport("__Internal", EntryPoint="vgGetfv")] 
+#endif
 		unsafe extern static  void  Getfv(uint type, int count, float* values);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgGetiv")] 
+#elif IOS
+		[DllImport("__Internal", EntryPoint="vgGetiv")] 
+#endif
 		unsafe extern static  void  Getiv(uint type, int count, int* values);
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -615,21 +668,37 @@ namespace MonkVG
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgSetParameterf")] 
-		public extern static void  SetParameterf(uint obj, int paramType, float value);
+#elif IOS
+		[DllImport("__Internal", EntryPoint="vgSetParameterf")] 
+#endif
+		public extern static void  SetParameterf(uint obj, uint paramType, float value);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgSetParameteri")] 
-		public extern static void  SetParameteri(uint obj, int paramType, int value);
+#elif IOS
+		[DllImport("__Internal", EntryPoint="vgSetParameteri")] 
+#endif
+		public extern static void  SetParameteri(uint obj, uint paramType, int value);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgSetParameterfv")] 
-		unsafe extern static void  SetParameterfv(uint obj, int paramType, int count, float* values);
-
+#elif IOS
+		[DllImport("__Internal", EntryPoint="vgSetParameterfv")] 
+#endif
+		unsafe extern static void  SetParameterfv(uint obj, uint paramType, int count, float* values);
+/*
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgSetParameteriv")] 
-		unsafe extern static void  SetParameteriv(uint obj, int paramType, int count, int* values);
-
+#elif IOS
+		[DllImport("__Internal", EntryPoint="vgSetParameteriv")] 
+#endif
+		unsafe extern static void  SetParameteriv(uint obj, uint paramType, int count, int* values);
+*/
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		public static void SetParameter(uint obj, int paramType, float[] values)
+		public static void SetParameter(uint obj, uint paramType, float[] values)
 		{
 			unsafe 
 			{
@@ -641,8 +710,8 @@ namespace MonkVG
 		}
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		public static void SetParameter(uint obj, int paramType, int[] values)
+/*
+		public static void SetParameter(uint obj, uint paramType, int[] values)
 		{
 			unsafe 
 			{
@@ -652,23 +721,43 @@ namespace MonkVG
 				}
 			}
 		}
-
+*/
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgGetParameterf")] 
+#elif IOS
+		[DllImport("__Internal", EntryPoint="vgGetParameterf")] 
+#endif
 		public extern static float GetParameterf(uint obj, int paramType);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgGetParameteri")] 
+#elif IOS
+		[DllImport("__Internal", EntryPoint="vgGetParameteri")] 
+#endif
 		public extern static int  GetParameteri(uint obj, int paramType);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgGetParameterVectorSize")] 
+#elif IOS
+		[DllImport("__Internal", EntryPoint="vgGetParameterVectorSize")] 
+#endif
 		public extern static int GetParameterVectorSize(uint obj, int paramType);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgGetParameterfv")] 
+#elif IOS
+		[DllImport("__Internal", EntryPoint="vgGetParameterfv")] 
+#endif
 		unsafe extern static void GetParameterfv(uint obj, int paramType, int count, float * values);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgGetParameteriv")] 
+#elif IOS
+		[DllImport("__Internal", EntryPoint="vgGetParameteriv")] 
+#endif
 		unsafe extern static void GetParameteriv(uint obj, int paramType, int count, int *values);
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -700,29 +789,73 @@ namespace MonkVG
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgLoadIdentity")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgLoadIdentity")]
+#endif
 		public extern static  void LoadIdentity();
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgLoadMatrix")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgLoadMatrix")]
+#endif
 		unsafe extern static  void LoadMatrix(float * m);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgGetMatrix")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgGetMatrix")]
+#endif
 		unsafe extern static  void GetMatrix(float * m);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgMultMatrix")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgMultMatrix")]
+#endif
 		unsafe extern static  void MultMatrix(float * m);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgTranslate")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgTranslate")]
+#endif
 		public extern static  void Translate(float tx, float ty);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgScale")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgScale")]
+#endif
 		public extern static  void Scale(float sx, float sy);
-
+/*
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgShear")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgShear")]
+#endif
 		public extern static  void Shear(float shx, float shy);
-
+*/
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgRotate")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgRotate")]
+#endif
 		public extern static  void Rotate(float angle);
+
+		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		public static void LoadMatrix(VG.MatrixMode mm, Matrix3 m)
+		{
+			unsafe 
+			{
+				VG.Seti((uint)VG.ParamType.MATRIX_MODE,(int)mm);
+				float* v = &m.R0C0;
+				LoadMatrix (v);
+			}
+		}
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -759,81 +892,169 @@ namespace MonkVG
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+/*
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgMask")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgMask")]
+#endif
 		public extern static void Mask(uint mask, MaskOperation operation, int x, int y, int width, int height);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgRenderToMask")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgRenderToMask")]
+#endif
 		public extern static void RenderToMask(uint path, PaintMode paintModes, MaskOperation operation);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgCreateMaskLayer")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgCreateMaskLayer")]
+#endif
 		public extern static uint CreateMaskLayer(int width, int height);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgDestroyMaskLayer")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgDestroyMaskLayer")]
+#endif
 		public extern static void DestroyMaskLayer(uint maskLayer);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgFillMaskLayer")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgFillMaskLayer")]
+#endif
 		public extern static void FillMaskLayer(uint maskLayer, int x, int y, int width, int height, float value);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgCopyMask")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgCopyMask")]
+#endif
 		public extern static void CopyMask(uint maskLayer, int dx, int dy, int sx, int sy, int width, int height);
-
+*/
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgClear")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgClear")]
+#endif
 		public extern static void Clear(int x, int y, int width, int height);
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgCreatePath")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgCreatePath")]
+#endif
 		public extern static  uint CreatePath(PathFormat pathFormat, PathDataType datatype, float scale, float bias, int segmentCapacityHint, int coordCapacityHint, PathCapabilities capabilities);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgClearPath")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgClearPath")]
+#endif
 		public extern static  void ClearPath(uint path, PathCapabilities capabilities);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgDestroyPath")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgDestroyPath")]
+#endif
 		public extern static  void DestroyPath(uint path);
-
+/*
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgRemovePathCapabilities")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgRemovePathCapabilities")]
+#endif
 		public extern static  void RemovePathCapabilities(uint path, PathCapabilities capabilities);
-
+*/
+/*
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgGetPathCapabilities")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgGetPathCapabilities")]
+#endif
 		public extern static  PathCapabilities GetPathCapabilities(uint path);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgAppendPath")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgAppendPath")]
+#endif
 		public extern static  void AppendPath(uint dstPath, uint srcPath);
-
+*/
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgAppendPathData")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgAppendPathData")]
+#endif
 		unsafe extern static  void AppendPathData(uint dstPath, int numSegments, byte *pathSegments, void *pathData);
-
+/*
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgModifyPathCoords")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgModifyPathCoords")]
+#endif
 		unsafe extern static  void ModifyPathCoords(uint dstPath, int startIndex, int numSegments, void * pathData);
-
+*/
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgTransformPath")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgTransformPath")]
+#endif
 		public extern static  void TransformPath(uint dstPath, uint srcPath);
-
+/*
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgInterpolatePath")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgInterpolatePath")]
+#endif
 		public extern static  bool InterpolatePath(uint dstPath, uint startPath, uint endPath, float amount);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgPathLength")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgPathLength")]
+#endif
 		public extern static  float PathLength(uint path, int startSegment, int numSegments);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgPointAlongPath")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgPointAlongPath")]
+#endif
 		unsafe extern static  void PointAlongPath(uint path, int startSegment, int numSegments, float distance, float *x, float *y, float *tangentX, float *tangentY);
-
+*/
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgPathBounds")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgPathBounds")]
+#endif
 		unsafe extern static  void PathBounds(uint path, float *minX, float *minY, float *width, float*height);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgPathTransformedBounds")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgPathTransformedBounds")]
+#endif
 		unsafe extern static  void PathTransformedBounds(uint path, float *minX, float *minY, float *width, float *height);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgDrawPath")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgDrawPath")]
+#endif
 		public extern static  void DrawPath(uint path, PaintMode paintModes);
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		public static void AppendPathData(uint path, byte[] segments, Vector2[] coords)
 		{
-			System.Diagnostics.Debug.Assert (segments.Length == coords.Length);
 			unsafe {
 				fixed(byte *s=segments) {
 					fixed(float *c = &coords [0].X) {
@@ -845,6 +1066,19 @@ namespace MonkVG
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+		public static void AppendPathData(uint path, byte[] segments, float[] coords)
+		{
+			unsafe {
+				fixed(byte *s=segments) {
+					fixed(float *c = &coords [0]) {
+						AppendPathData (path, segments.Length, s, c);
+					}
+				}
+			}
+		}
+
+		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		/*
 		public static  void ModifyPathCoords(uint dstPath, int startIndex, int numSegments, Vector2[] coords)
 		{
 			unsafe {
@@ -853,23 +1087,23 @@ namespace MonkVG
 				}
 			}
 		}
-
+		*/
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+		/*
 		public static Vector4 PointAlongPath(uint path, int startSegment, int numSegments, float distance)
 		{
-			Vector4 v;
+			Vector4 v=Vector4.Zero;
 			unsafe {
 				PointAlongPath (path, startSegment, numSegments, distance, &v.X, &v.Y, &v.W, &v.Z);
 			}
 			return v;
 		}
-
+		*/
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		public static Vector4 PathBounds(uint path)
 		{
-			Vector4 v;
+			Vector4 v=Vector4.Zero;
 			unsafe {
 				PathBounds (path, &v.X, &v.Y, &v.W, &v.Z);
 			}
@@ -880,7 +1114,7 @@ namespace MonkVG
 
 		public static Vector4 PathTransformedBounds(uint path)
 		{
-			Vector4 v;
+			Vector4 v=Vector4.Zero;
 			unsafe {
 				PathTransformedBounds (path, &v.X, &v.Y, &v.W, &v.Z);
 			}
@@ -890,70 +1124,154 @@ namespace MonkVG
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgCreatePaint")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgCreatePaint")]
+#endif
 		public extern static  uint CreatePaint();
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgDestroyPaint")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgDestroyPaint")]
+#endif
 		public extern static  void DestroyPaint(uint paint);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgSetPaint")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgSetPaint")]
+#endif
 		public extern static  void SetPaint(uint paint, PaintMode paintModes);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgGetPaint")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgGetPaint")]
+#endif
 		public extern static  uint GetPaint(PaintMode paintMode);
-
+/*
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgSetColor")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgSetColor")]
+#endif
 		public extern static  void SetColor(uint paint, uint rgba);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgGetColor")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgGetColor")]
+#endif
 		public extern static  uint GetColor(uint paint);
-
+*/
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgPaintPattern")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgPaintPattern")]
+#endif
 		public extern static  void PaintPattern(uint paint, uint image);
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgCreateImage")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgCreateImage")]
+#endif
 		public extern static  uint CreateImage(ImageFormat format, int width, int height, ImageQuality allowedQuality);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgDestroyImage")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgDestroyImage")]
+#endif
 		public extern static  void DestroyImage(uint image);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgClearImage")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgClearImage")]
+#endif
 		public extern static  void ClearImage(uint image, int x, int y, int width, int height);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgImageSubData")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgImageSubData")]
+#endif
 		unsafe extern static  void ImageSubData(uint image, void * data, int dataStride, ImageFormat dataFormat, int x, int y, int width, int height);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgGetImageSubData")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgGetImageSubData")]
+#endif
 		unsafe extern static  void GetImageSubData(uint image, void *data, int dataStride, ImageFormat dataFormat, int x, int y, int width, int height);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgChildImage")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgChildImage")]
+#endif
 		public extern static  uint ChildImage(uint imageParent, int x, int y, int width, int height);
-
+/*
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgGetParent")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgGetParent")]
+#endif
 		public extern static  uint GetParent(uint image); 
-
+*/
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgCopyImage")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgCopyImage")]
+#endif
 		public extern static  void CopyImage(uint imageDst, int dx, int dy, uint imageSrc, int sx, int sy, int width, int height, Boolean dither);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgDrawImage")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgDrawImage")]
+#endif
 		public extern static  void DrawImage(uint image);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgSetPixels")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgSetPixels")]
+#endif
 		public extern static  void SetPixels(int dx, int dy, uint imageSrc, int sx, int sy, int width, int height);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgWritePixels")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgWritePixels")]
+#endif
 		unsafe extern static  void WritePixels(void *data, int dataStride, ImageFormat dataFormat, int dx, int dy, int width, int height);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgGetPixels")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgGetPixels")]
+#endif
 		public extern static  void GetPixels(uint imageDst, int dx, int dy, int sx, int sy, int width, int height);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgReadPixels")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgReadPixels")]
+#endif
 		unsafe extern static  void ReadPixels(void *data, int dataStride, ImageFormat dataFormat, int sx, int sy, int width, int height);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgCopyPixels")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgCopyPixels")]
+#endif
 		public extern static  void CopyPixels(int dx, int dy, int sx, int sy, int width, int height);
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1011,25 +1329,53 @@ namespace MonkVG
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgCreateFont")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgCreateFont")]
+#endif
 		public extern static uint CreateFont(int glyphCapacityHint);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgDestroyFont")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgDestroyFont")]
+#endif
 		public extern static void DestroyFont(uint font);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgSetGlyphToPath")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgSetGlyphToPath")]
+#endif
 		unsafe extern static void SetGlyphToPath(uint font, uint glyphIndex, uint path, Boolean isHinted, float* glyphOrigin, float* escapement);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgSetGlyphToImage")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgSetGlyphToImage")]
+#endif
 		unsafe extern static void SetGlyphToImage(uint font, uint glyphIndex, uint image, float* glyphOrigin, float* escapement);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgClearGlyph")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgClearGlyph")]
+#endif
 		public extern static void ClearGlyph(uint font,uint glyphIndex);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgDrawGlyph")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgDrawGlyph")]
+#endif
 		public extern static void DrawGlyph(uint font, uint glyphIndex, PaintMode paintModes, Boolean allowAutoHinting);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgDrawGlyphs")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgDrawGlyphs")]
+#endif
 		unsafe extern static void DrawGlyphs(uint font, int glyphCount, uint *glyphIndices, float *adjustments_x, float *adjustments_y, PaintMode paintModes, Boolean allowAutoHinting);
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1038,38 +1384,70 @@ namespace MonkVG
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+/*
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgColorMatrix")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgColorMatrix")]
+#endif
 		unsafe extern static void ColorMatrix(uint dst, uint src, float *matrix);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgConvolve")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgConvolve")]
+#endif
 		unsafe extern static void Convolve(uint dst, uint src, int kernelWidth, int kernelHeight, int shiftX, int shiftY, short *kernel, float scale, float bias, TilingMode tilingMode);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgSeparableConvolve")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgSeparableConvolve")]
+#endif
 		unsafe extern static void SeparableConvolve(uint dst, uint src, int kernelWidth, int kernelHeight, int shiftX, int shiftY, short *kernelX, short *kernelY, float scale, float bias, TilingMode tilingMode);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgGaussianBlur")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgGaussianBlur")]
+#endif
 		public extern static void GaussianBlur(uint dst, uint src, float stdDeviationX, float stdDeviationY, TilingMode tilingMode);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgLookup")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgLookup")]
+#endif
 		unsafe extern static void Lookup(uint dst, uint src, byte *redLUT, byte *greenLUT, byte *blueLUT, byte *alphaLUT, Boolean outputLinear, Boolean outputPremultiplied);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgLookupSingle")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgLookupSingle")]
+#endif
 		unsafe extern static void LookupSingle(uint dst, uint src, uint* lookupTable, ImageChannel sourceChannel, Boolean outputLinear, Boolean outputPremultiplied);
-
+*/
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		// TODO: wrap unsafe
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+/*
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgHardwareQuery")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgHardwareQuery")]
+#endif
 		public extern static HardwareQueryResult HardwareQuery(HardwareQueryType key, int setting);
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgGetString")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgGetString")]
+#endif
 		unsafe extern static byte* vgGetString(StringId name);
-
+*/
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		public static string GetString(StringId name)
@@ -1092,40 +1470,77 @@ namespace MonkVG
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgCreateBatchMNK")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgCreateBatchMNK")]
+#endif
 		public extern static uint  CreateBatchMNK();
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgDestroyBatchMNK")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgDestroyBatchMNK")]
+#endif
 		public extern static void  DestroyBatchMNK( uint batch );
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgBeginBatchMNK")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgBeginBatchMNK")]
+#endif
 		public extern static void BeginBatchMNK( uint batch );
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgEndBatchMNK")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgEndBatchMNK")]
+#endif
 		public extern static void EndBatchMNK( uint batch );
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgDrawBatchMNK")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgDrawBatchMNK")]
+#endif
 		public extern static void DrawBatchMNK( uint batch );
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgDumpBatchMNK")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgDumpBatchMNK")]
+#endif
 		unsafe extern static void DumpBatchMNK( uint batch, void **vertices, int *size );
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgCreateContextMNK")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgCreateContextMNK")]
+#endif
 		public extern static Boolean CreateContextMNK( int width, int height, RenderingBackendTypeMNK backend );
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgResizeSurfaceMNK")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgResizeSurfaceMNK")]
+#endif
 		public extern static void ResizeSurfaceMNK( int width, int height );
 
+#if ANDROID
 		[DllImport("libOpenVG-shared.so", EntryPoint="vgDestroyContextMNK")] 
+#elif IOS
+		[DllImport ("__Internal",EntryPoint="vgDestroyContextMNK")]
+#endif
 		public extern static void DestroyContextMNK();
 
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	}
 
 	/// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
